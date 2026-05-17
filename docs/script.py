@@ -2,7 +2,7 @@ import pandas as pd
 import json
 
 # Cargar datos
-df = pd.read_csv("datos.csv")
+df = pd.read_csv("C:\\Users\\javie\\OneDrive\\Desktop\\Actividades_IA\\docs\\datos.csv")
 
 # Limpiar datos (quita NA)
 df = df.dropna()
