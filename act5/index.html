@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Proyecto Estadística</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+<h1>📊 Análisis de Datos</h1>
+
+<h2>Media</h2>
+<p id="media"></p>
+
+<h2>Mediana</h2>
+<p id="mediana"></p>
+
+<h2>Moda</h2>
+<p id="moda"></p>
+
+<h2>Frecuencia Absoluta</h2>
+<canvas id="barras"></canvas>
+
+<h2>Frecuencia Relativa</h2>
+<canvas id="pastel"></canvas>
+
+<h2>Frecuencia Acumulada</h2>
+<canvas id="acumulada"></canvas>
+
+<h2>Polígono de Frecuencia (Altura)</h2>
+<canvas id="poligono"></canvas>
+
+<script>
+fetch("resultados.json")
+.then(res => res.json())
+.then(data => {
+
+    // Mostrar estadísticas
+    document.getElementById("media").innerText = JSON.stringify(data.media);
+    document.getElementById("mediana").innerText = JSON.stringify(data.mediana);
+    document.getElementById("moda").innerText = JSON.stringify(data.moda);
+
+    // FRECUENCIA
+    const labels = Object.keys(data.frecuencia);
+    const valores = Object.values(data.frecuencia);
+
+    // BARRAS
+    new Chart(document.getElementById("barras"), {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{ label: "Frecuencia", data: valores }]
+        }
+    });
+
+    // PASTEL
+    new Chart(document.getElementById("pastel"), {
+        type: "pie",
+        data: {
+            labels: labels,
+            datasets: [{ data: Object.values(data.relativa) }]
+        }
+    });
+
+    // ACUMULADA
+    new Chart(document.getElementById("acumulada"), {
+        type: "line",
+        data: {
+            labels: labels,
+            datasets: [{ label: "Acumulada", data: Object.values(data.acumulada) }]
+        }
+    });
+
+    // POLÍGONO
+    new Chart(document.getElementById("poligono"), {
+        type: "line",
+        data: {
+            labels: data.altura,
+            datasets: [{ label: "Altura", data: data.altura }]
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
