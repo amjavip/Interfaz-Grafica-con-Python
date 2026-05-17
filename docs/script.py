@@ -42,4 +42,4 @@ resultados = {
 with open("resultados.json", "w") as f:
     json.dump(resultados, f)
 
-print("✅ JSON generado correctamente")
+print("JSON generado correctamente")
