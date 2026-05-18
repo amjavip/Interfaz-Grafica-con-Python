@@ -148,7 +148,7 @@
 
     <script>
         // Cargar datos desde el archivo generado por Python
-        fetch("./resultados.json")
+        fetch("resultados.json")
         .then(res => {
             if (!res.ok) throw new Error("No se pudo cargar el archivo resultados.json");
             return res.json();
