@@ -1,176 +1,256 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<title>Análisis Estadístico - Instrumentos</title>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Práctico - Análisis Estadístico</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
 
-<style>
-body {
-    font-family: Arial;
-    background: #0f172a;
-    color: white;
-    text-align: center;
-}
+        h1 {
+            color: #38bdf8;
+            margin-bottom: 5px;
+        }
 
-h1 {
-    margin-top: 20px;
-}
+        .desc {
+            color: #94a3b8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
 
-.container {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    padding: 20px;
-}
+        /* Contenedor de bloques de estadísticas */
+        .stats-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
 
-.card {
-    background: #1e293b;
-    padding: 20px;
-    border-radius: 15px;
-}
+        .stat-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            min-width: 250px;
+            border: 1px solid #334155;
+        }
 
-canvas {
-    background: white;
-    border-radius: 10px;
-}
+        .stat-card h3 {
+            margin-top: 0;
+            color: #38bdf8;
+            border-bottom: 2px solid #334155;
+            padding-bottom: 8px;
+        }
 
-.stats {
-    display: flex;
-    justify-content: space-around;
-}
+        .stat-card p {
+            text-align: left;
+            margin: 8px 0;
+            font-size: 0.95rem;
+        }
 
-.stat {
-    background: #334155;
-    padding: 15px;
-    border-radius: 10px;
-}
-</style>
+        /* Cuadrícula de Gráficos */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .chart-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid #334155;
+        }
+
+        .chart-card h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #f1f5f9;
+        }
+
+        .canvas-container {
+            background: #ffffff;
+            padding: 15px;
+            border-radius: 10px;
+            position: relative;
+        }
+    </style>
 </head>
-
 <body>
 
-<h1>Análisis Estadístico de Instrumentos</h1>
+    <h1>Dashboard de Análisis Estadístico</h1>
+    <p class="desc">Visualización de Frecuencias y Tendencia Central (Peso, Altura, Velocidad y Color)</p>
 
-<p>Este proyecto analiza datos de instrumentos musicales considerando peso, precio y tipo, aplicando medidas estadísticas y gráficas.</p>
-
-<!-- ESTADÍSTICAS -->
-<div class="stats">
-    <div class="stat">
-        <h3>Media</h3>
-        <p id="media"></p>
+    <div class="stats-container">
+        <div class="stat-card">
+            <h3>Media (Promedio)</h3>
+            <p id="media-peso">Peso: Cargando...</p>
+            <p id="media-altura">Altura: Cargando...</p>
+            <p id="media-velocidad">Velocidad: Cargando...</p>
+        </div>
+        <div class="stat-card">
+            <h3>Mediana (Centro)</h3>
+            <p id="mediana-peso">Peso: Cargando...</p>
+            <p id="mediana-altura">Altura: Cargando...</p>
+            <p id="mediana-velocidad">Velocidad: Cargando...</p>
+        </div>
+        <div class="stat-card">
+            <h3>Moda (Más común)</h3>
+            <p id="moda-peso">Peso: Cargando...</p>
+            <p id="moda-altura">Altura: Cargando...</p>
+            <p id="moda-velocidad">Velocidad: Cargando...</p>
+            <p id="moda-color" style="color: #ae7bff; font-weight: bold;">Color: Cargando...</p>
+        </div>
     </div>
-    <div class="stat">
-        <h3>Mediana</h3>
-        <p id="mediana"></p>
+
+    <div class="charts-grid">
+        
+        <div class="chart-card">
+            <h3>Frecuencias Absolutas (Colores)</h3>
+            <div class="canvas-container">
+                <canvas id="chart-barras"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>Frecuencias Relativas (Distribución Porcentual)</h3>
+            <div class="canvas-container">
+                <canvas id="chart-pastel"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>Frecuencias Acumuladas</h3>
+            <div class="canvas-container">
+                <canvas id="chart-acumulada"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-card">
+            <h3>Polígono de Frecuencias (Velocidad)</h3>
+            <div class="canvas-container">
+                <canvas id="chart-poligono"></canvas>
+            </div>
+        </div>
+
     </div>
-    <div class="stat">
-        <h3>Moda</h3>
-        <p id="moda"></p>
-    </div>
-</div>
 
-<!-- GRÁFICAS -->
-<div class="container">
+    <script>
+        // Cargar datos desde el archivo generado por Python
+        fetch("./resultados.json")
+        .then(res => {
+            if (!res.ok) throw new Error("No se pudo cargar el archivo resultados.json");
+            return res.json();
+        })
+        .then(data => {
 
-<div class="card">
-    <h3>Frecuencia Absoluta</h3>
-    <canvas id="barras"></canvas>
-</div>
+            // 1. ASIGNAR TEXTOS DE TENDENCIA CENTRAL
+            document.getElementById("media-peso").innerText = "Peso: " + data.media.peso.toFixed(2);
+            document.getElementById("media-altura").innerText = "Altura: " + data.media.altura.toFixed(2);
+            document.getElementById("media-velocidad").innerText = "Velocidad: " + data.media.velocidad.toFixed(2);
 
-<div class="card">
-    <h3>Frecuencia Relativa</h3>
-    <canvas id="pastel"></canvas>
-</div>
+            document.getElementById("mediana-peso").innerText = "Peso: " + data.mediana.peso;
+            document.getElementById("mediana-altura").innerText = "Altura: " + data.mediana.altura;
+            document.getElementById("mediana-velocidad").innerText = "Velocidad: " + data.mediana.velocidad;
 
-<div class="card">
-    <h3>Frecuencia Acumulada</h3>
-    <canvas id="acumulada"></canvas>
-</div>
+            document.getElementById("moda-peso").innerText = "Peso: " + data.moda.peso;
+            document.getElementById("moda-altura").innerText = "Altura: " + data.moda.altura;
+            document.getElementById("moda-velocidad").innerText = "Velocidad: " + data.moda.velocidad;
+            document.getElementById("moda-color").innerText = "Color predominante: " + data.moda.color;
 
-<div class="card">
-    <h3>Polígono de Frecuencia (Peso)</h3>
-    <canvas id="poligono"></canvas>
-</div>
+            // PREPARACIÓN DE COLORES PARA LAS GRÁFICAS (Estilo paleta pastel/profesional)
+            const paletaColores = ['#38bdf8', '#fb7185', '#34d399', '#fbbf24', '#a78bfa', '#f472b6'];
 
-</div>
+            // 2. GRÁFICA DE BARRAS (Frecuencia Absoluta)
+            const labelsColor = Object.keys(data.frecuencia);
+            new Chart(document.getElementById("chart-barras"), {
+                type: "bar",
+                data: {
+                    labels: labelsColor,
+                    datasets: [{
+                        label: "Cantidad de registros",
+                        data: Object.values(data.frecuencia),
+                        backgroundColor: paletaColores,
+                        borderWidth: 1
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
 
-<script>
-fetch("./resultados.json")
-.then(res => res.json())
-.then(data => {
+            // 3. DIAGRAMA DE PASTEL (Frecuencia Relativa)
+            // Convertimos los valores decimales a porcentajes para mostrar en el gráfico
+            const valoresRelativosPorcentaje = Object.values(data.relativa).map(v => (v * 100).toFixed(1));
+            new Chart(document.getElementById("chart-pastel"), {
+                type: "pie",
+                data: {
+                    labels: labelsColor,
+                    datasets: [{
+                        data: valoresRelativosPorcentaje,
+                        backgroundColor: paletaColores
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) { return ` ${context.label}: ${context.raw}%`; }
+                            }
+                        }
+                    }
+                }
+            });
 
-    // =========================
-    // MOSTRAR ESTADÍSTICAS
-    // =========================
-    document.getElementById("media").innerText =
-        "Peso: " + data.media.peso.toFixed(2) +
-        " | Precio: " + data.media.precio.toFixed(2);
+            // 4. GRÁFICA DE LÍNEA ACUMULADA
+            new Chart(document.getElementById("chart-acumulada"), {
+                type: "line",
+                data: {
+                    labels: labelsColor,
+                    datasets: [{
+                        label: "Frecuencia Acumulada",
+                        data: Object.values(data.acumulada),
+                        borderColor: "#6366f1",
+                        backgroundColor: "rgba(99, 102, 241, 0.2)",
+                        fill: true,
+                        tension: 0.1,
+                        borderWidth: 3
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true } } }
+            });
 
-    document.getElementById("mediana").innerText =
-        "Peso: " + data.mediana.peso +
-        " | Precio: " + data.mediana.precio;
+            // 5. POLÍGONO DE FRECUENCIAS (Variable: Velocidad)
+            new Chart(document.getElementById("chart-poligono"), {
+                type: "line",
+                data: {
+                    labels: data.poligono.labels,
+                    datasets: [{
+                        label: "Frecuencia de Velocidad",
+                        data: data.poligono.valores,
+                        borderColor: "#f43f5e",
+                        backgroundColor: "rgba(244, 63, 94, 0.1)",
+                        fill: true,
+                        tension: 0.3, // Curvatura característica del polígono
+                        borderWidth: 2,
+                        pointBackgroundColor: "#f43f5e"
+                    }]
+                },
+                options: { responsive: true, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
+            });
 
-    document.getElementById("moda").innerText =
-        "Tipo: " + data.moda.tipo;
-
-    // =========================
-    // FRECUENCIAS
-    // =========================
-    const labels = Object.keys(data.frecuencia);
-    const valores = Object.values(data.frecuencia);
-
-    // BARRAS
-    new Chart(document.getElementById("barras"), {
-        type: "bar",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Frecuencia",
-                data: valores
-            }]
-        }
-    });
-
-    // PASTEL
-    new Chart(document.getElementById("pastel"), {
-        type: "pie",
-        data: {
-            labels: labels,
-            datasets: [{
-                data: Object.values(data.relativa)
-            }]
-        }
-    });
-
-    // ACUMULADA
-    new Chart(document.getElementById("acumulada"), {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Acumulada",
-                data: Object.values(data.acumulada)
-            }]
-        }
-    });
-
-    // =========================
-    // POLÍGONO DE FRECUENCIA
-    // =========================
-    new Chart(document.getElementById("poligono"), {
-        type: "line",
-        data: {
-            labels: data.peso,
-            datasets: [{
-                label: "Peso",
-                data: data.peso
-            }]
-        }
-    });
-
-});
-</script>
-
+        })
+        .catch(err => console.error("Error cargando los datos:", err));
+    </script>
 </body>
 </html>
