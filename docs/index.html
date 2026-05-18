@@ -1,45 +1,122 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-    <title>Proyecto Estadística</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<meta charset="UTF-8">
+<title>Análisis Estadístico - Instrumentos</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #1e293b;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+canvas {
+    background: white;
+    border-radius: 10px;
+}
+
+.stats {
+    display: flex;
+    justify-content: space-around;
+}
+
+.stat {
+    background: #334155;
+    padding: 15px;
+    border-radius: 10px;
+}
+</style>
 </head>
+
 <body>
 
-<h1>Análisis de Datos</h1>
+<h1>Análisis Estadístico de Instrumentos</h1>
 
-<h2>Media</h2>
-<p id="media"></p>
+<p>Este proyecto analiza datos de instrumentos musicales considerando peso, precio y tipo, aplicando medidas estadísticas y gráficas.</p>
 
-<h2>Mediana</h2>
-<p id="mediana"></p>
+<!-- ESTADÍSTICAS -->
+<div class="stats">
+    <div class="stat">
+        <h3>Media</h3>
+        <p id="media"></p>
+    </div>
+    <div class="stat">
+        <h3>Mediana</h3>
+        <p id="mediana"></p>
+    </div>
+    <div class="stat">
+        <h3>Moda</h3>
+        <p id="moda"></p>
+    </div>
+</div>
 
-<h2>Moda</h2>
-<p id="moda"></p>
+<!-- GRÁFICAS -->
+<div class="container">
 
-<h2>Frecuencia Absoluta</h2>
-<canvas id="barras"></canvas>
+<div class="card">
+    <h3>Frecuencia Absoluta</h3>
+    <canvas id="barras"></canvas>
+</div>
 
-<h2>Frecuencia Relativa</h2>
-<canvas id="pastel"></canvas>
+<div class="card">
+    <h3>Frecuencia Relativa</h3>
+    <canvas id="pastel"></canvas>
+</div>
 
-<h2>Frecuencia Acumulada</h2>
-<canvas id="acumulada"></canvas>
+<div class="card">
+    <h3>Frecuencia Acumulada</h3>
+    <canvas id="acumulada"></canvas>
+</div>
 
-<h2>Polígono de Frecuencia (Altura)</h2>
-<canvas id="poligono"></canvas>
+<div class="card">
+    <h3>Polígono de Frecuencia (Peso)</h3>
+    <canvas id="poligono"></canvas>
+</div>
+
+</div>
 
 <script>
-fetch("https://amjavip.github.io/Interfaz-Grafica-con-Python/resultados.json")
+fetch("./resultados.json")
 .then(res => res.json())
 .then(data => {
 
-    // Mostrar estadísticas
-    document.getElementById("media").innerText = JSON.stringify(data.media);
-    document.getElementById("mediana").innerText = JSON.stringify(data.mediana);
-    document.getElementById("moda").innerText = JSON.stringify(data.moda);
+    // =========================
+    // MOSTRAR ESTADÍSTICAS
+    // =========================
+    document.getElementById("media").innerText =
+        "Peso: " + data.media.peso.toFixed(2) +
+        " | Precio: " + data.media.precio.toFixed(2);
 
-    // FRECUENCIA
+    document.getElementById("mediana").innerText =
+        "Peso: " + data.mediana.peso +
+        " | Precio: " + data.mediana.precio;
+
+    document.getElementById("moda").innerText =
+        "Tipo: " + data.moda.tipo;
+
+    // =========================
+    // FRECUENCIAS
+    // =========================
     const labels = Object.keys(data.frecuencia);
     const valores = Object.values(data.frecuencia);
 
@@ -48,7 +125,10 @@ fetch("https://amjavip.github.io/Interfaz-Grafica-con-Python/resultados.json")
         type: "bar",
         data: {
             labels: labels,
-            datasets: [{ label: "Frecuencia", data: valores }]
+            datasets: [{
+                label: "Frecuencia",
+                data: valores
+            }]
         }
     });
 
@@ -57,7 +137,9 @@ fetch("https://amjavip.github.io/Interfaz-Grafica-con-Python/resultados.json")
         type: "pie",
         data: {
             labels: labels,
-            datasets: [{ data: Object.values(data.relativa) }]
+            datasets: [{
+                data: Object.values(data.relativa)
+            }]
         }
     });
 
@@ -66,16 +148,24 @@ fetch("https://amjavip.github.io/Interfaz-Grafica-con-Python/resultados.json")
         type: "line",
         data: {
             labels: labels,
-            datasets: [{ label: "Acumulada", data: Object.values(data.acumulada) }]
+            datasets: [{
+                label: "Acumulada",
+                data: Object.values(data.acumulada)
+            }]
         }
     });
 
-    // POLÍGONO
+    // =========================
+    // POLÍGONO DE FRECUENCIA
+    // =========================
     new Chart(document.getElementById("poligono"), {
         type: "line",
         data: {
-            labels: data.altura,
-            datasets: [{ label: "Altura", data: data.altura }]
+            labels: data.peso,
+            datasets: [{
+                label: "Peso",
+                data: data.peso
+            }]
         }
     });
 
